@@ -32,3 +32,13 @@ func (mngr *Manager) Use(Middlewares ...Middleware) *Manager {
 	mngr.allMiddlewares = append(mngr.allMiddlewares, Middlewares...)
 	return mngr
 }
+
+func (mngr *Manager) Wrap(next http.Handler, Middlewares ...Middleware) http.Handler {
+	n := next
+
+	for _, middleware := range Middlewares {
+		n = middleware(n)
+	}
+
+	return n
+}
